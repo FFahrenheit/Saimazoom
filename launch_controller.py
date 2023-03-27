@@ -1,10 +1,10 @@
 # Un script de python que lance el controlador (launch_controller.py)
-from time import sleep
+from controllers.controller import Controller
 
 def main():
-    while True:
-        print("Controllers running!")
-        sleep(1)
+    controller = Controller()
+    controller.start_consuming()
+
 
 if __name__ == '__main__':
     try:

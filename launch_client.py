@@ -1,10 +1,10 @@
 # Un script de python que lance un cliente y simule una serie de acciones (launch_client.py)
-from time import sleep
+from utils.queue_consumer import QueueConsumer
+import config
 
 def main():
-    while True:
-        print("Clients running!")
-        sleep(1)
+    queue = QueueConsumer(config.queue_clientes)
+    queue.start_consumig()
 
 if __name__ == '__main__':
     try:
