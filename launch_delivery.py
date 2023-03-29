@@ -1,10 +1,9 @@
 # Un script de python que lance un repartidor (launch_delivery.py)
-from time import sleep
+from controllers.delivery import Delivery
 
 def main():
-    while True:
-        print("Delivery running!")
-        sleep(1)
+    controller = Delivery()
+    controller.start_consuming()
 
 if __name__ == '__main__':
     try:

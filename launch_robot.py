@@ -1,14 +1,16 @@
 # Un script de python que lance un robot (launch_robot.py)
-from time import sleep
+from controllers.robot import Robot
 
 def main():
-    while True:
-        print("Robots running!")
-        sleep(1)
+    try:
+        robot = Robot()
+        robot.start_consuming()
+    except Exception as e:
+        print(e)
 
-print(__name__)
 if __name__ == '__main__':
     try:
         main()
-    except KeyboardInterrupt:
+    except Exception as e:
+        print(e)
         print("Robots stopped")

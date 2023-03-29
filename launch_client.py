@@ -1,5 +1,5 @@
 # Un script de python que lance un cliente y simule una serie de acciones (launch_client.py)
-from utils.queue_consumer import QueueConsumer
+from utils.rpc_queue_consumer import QueueConsumer
 import config
 
 def main():
