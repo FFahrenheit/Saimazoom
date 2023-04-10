@@ -1,5 +1,9 @@
+"""
+Enums para los mensajes y estados de los mismos
+"""
 from enum import Enum
 
+#lista de mensajes
 class Message(Enum):
     REGISTRO = "RegistroCliente"
     LOGIN = "LoginCliente"
@@ -15,7 +19,9 @@ class Message(Enum):
     ORDER_CANCELED = "CanceledOrder"
     VIEW_ORDER = "ViewOrder"
     CLEAR_CANCELATION = "ClearOrderToCancel"
+    ON_DELIVER = "OrderOnDelivery"
 
+#lista de codigos de status
 class Status(Enum):
     ERROR = "Error"
     OK = "Ok"

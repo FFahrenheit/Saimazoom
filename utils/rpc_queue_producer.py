@@ -4,6 +4,13 @@ import uuid
 
 class QueueProducer:
     def __init__(self, queue: str, host: str=config.host_queues, time_limit=None) -> None:
+        """
+        Inicializa el productor de cola. Se conecta al servidor de colas y crea una cola para las respuestas.
+        Asigna un callback para procesar las respuestas obtenidas.
+        :param queue: El nombre de la cola a la que se enviarán los mensajes.
+        :param host: La dirección IP del servidor de colas.
+        :param time_limit: El tiempo máximo que se permitirá esperar una respuesta antes de cancelar la petición.
+        """
         # Nos conectamos al servidor de colas en cuestion
         self.time_limit = time_limit
         try:
@@ -34,11 +41,25 @@ class QueueProducer:
 
     # Función callback
     def on_response(self, channel, method, props, body):
+        """
+        Función callback que se llama cuando se recibe una respuesta.
+        Verifica que el correlation_id de la respuesta coincida con el de la petición.
+        :param channel: El canal de la conexión.
+        :param method: El método de la conexión.
+        :param props: Las propiedades de la conexión.
+        :param body: El cuerpo de la respuesta.
+        """
         # Solamente verifica que los correlations_id coincidan
         if self.correlation_id == props.correlation_id:
             self.response = body
 
     def call(self, body:str, time_limit=None):
+        """
+        Realiza una petición a la cola y espera por una respuesta.
+        :param body: El cuerpo del mensaje que se enviará a la cola.
+        :param time_limit: El tiempo máximo que se permitirá esperar una respuesta antes de cancelar la petición.
+        :return: La respuesta recibida.
+        """
         limit = time_limit if time_limit is not None else self.time_limit
 
         self.response = None

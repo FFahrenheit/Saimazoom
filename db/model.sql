@@ -2,7 +2,7 @@ CREATE TABLE user(
     username TEXT PRIMARY KEY, 
     password TEXT, 
     name TEXT
-);
+);;
 
 CREATE TABLE orders(
     id INTEGER PRIMARY KEY, 
@@ -12,7 +12,7 @@ CREATE TABLE orders(
     client TEXT NOT NULL,
     FOREIGN KEY (client)
         REFERENCES user(username)
-);
+);;
 
 CREATE TABLE log(
     id INTEGER PRIMARY KEY,
@@ -21,7 +21,7 @@ CREATE TABLE log(
     order_id INT NOT NULL,
     FOREIGN KEY (order_id)
         REFERENCES orders(id)
-);
+);;
 
 CREATE TRIGGER order_log
 AFTER INSERT
@@ -32,7 +32,7 @@ BEGIN
     NEW.status,
     NEW.id
   );
-END;
+END;;
 
 CREATE TRIGGER order_log_update
 AFTER UPDATE
@@ -43,4 +43,4 @@ BEGIN
     NEW.status,
     NEW.id
   );
-END;
+END;;

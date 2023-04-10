@@ -1,9 +1,16 @@
 import pika
 import config
-import uuid
 
 class WorkQueueProducer:
     def __init__(self, queue: str, host: str=config.host_queues, fanout=False) -> None:
+        """
+        Inicializa una instancia de WorkQueueProducer para enviar mensajes a una cola especificada.
+
+        Args:
+        - queue (str): Nombre de la cola a la que se enviarán los mensajes.
+        - host (str, optional): Dirección IP del servidor de colas. Por defecto, se utiliza la dirección especificada en la configuración.
+        - fanout (bool, optional): Especifica si se usará un exchange de tipo 'fanout' para enviar los mensajes. Por defecto, se utiliza False.
+        """
         self.fanout = fanout
         # Nos conectamos al servidor de colas en cuestion
         try:
@@ -26,6 +33,15 @@ class WorkQueueProducer:
             raise Exception(e)
 
     def call(self, body:str):
+        """
+        Envía un mensaje a la cola especificada.
+
+        Args:
+        - body (str): Contenido del mensaje.
+
+        Returns:
+        None.
+        """
         # Hacemos la peticion
         if self.fanout:
             self.channel.basic_publish(

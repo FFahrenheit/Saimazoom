@@ -5,12 +5,28 @@ import threading
 
 class UIConsole:
     def __init__(self, debounce_time = 0.15):
+        """
+        Inicializa la clase y define un tiempo de debounce predeterminado.
+
+        Parámetros:
+        debounce_time (float): tiempo de debounce en segundos. Valor por defecto es 0.15 segundos.
+        """
         self.debouce_time = debounce_time
 
     def clear(self):
+        """
+        Limpia la consola.
+        """
         os.system('cls' if os.name=='nt' else 'clear')
     
     def print_menu(self, options : list, selected = 0):
+        """
+        Imprime un menú en la consola con las opciones proporcionadas. La opción seleccionada se marca con un ">".
+
+        Parámetros:
+        options (list): lista de opciones a mostrar en el menú.
+        selected (int): índice de la opción seleccionada. Valor por defecto es 0.
+        """
         self.clear()
         print("Selecciona una opcion: \n")
 
@@ -20,6 +36,16 @@ class UIConsole:
         print(end='\n')
 
     def get_simple_menu(self, options, prompt):
+        """
+        Imprime un menú en la consola y devuelve la opción seleccionada por el usuario.
+
+        Parámetros:
+        options (list): lista de opciones a mostrar en el menú.
+        prompt (str): mensaje a mostrar al usuario antes de imprimir el menú.
+
+        Retorna:
+        int: índice de la opción seleccionada.
+        """
         valid = False
 
         while not valid:
@@ -41,7 +67,18 @@ class UIConsole:
         return selected - 1
 
 
-    def get_option_menu(self, options: list, prompt="Seleccione una opcion del menu:", old_ui=True) -> int:   
+    def get_option_menu(self, options: list, prompt="Seleccione una opcion del menu:", old_ui=True) -> int:
+        """
+        Imprime un menú en la consola y devuelve la opción seleccionada por el usuario.
+
+        Parámetros:
+        options (list): lista de opciones a mostrar en el menú.
+        prompt (str): mensaje a mostrar al usuario antes de imprimir el menú. Valor por defecto es "Seleccione una opcion del menu:".
+        old_ui (bool): determina si se utiliza una interfaz de usuario antigua o no. Valor por defecto es True.
+
+        Retorna:
+        int: índice de la opción seleccionada.
+        """
         if old_ui:
             return self.get_simple_menu(options, prompt)
         
@@ -50,10 +87,12 @@ class UIConsole:
         last = time.time()
         try:
             while True:
+                # Debounce
                 if time.time() - last < self.debouce_time:
                     continue
                 
                 if keyboard.is_pressed('up'):
+                    # Selección hacia arriba
                     last = time.time()
                     if selected == 0:
                         selected = len(options) - 1
@@ -61,6 +100,7 @@ class UIConsole:
                         selected -= 1
                     self.print_menu(options, selected)
                 elif keyboard.is_pressed('down'):
+                    # Selección hacia abajo
                     last = time.time()
                     if selected == len(options) - 1:
                         selected = 0
@@ -68,35 +108,57 @@ class UIConsole:
                         selected += 1
                     self.print_menu(options, selected)
                 elif keyboard.is_pressed('enter'):
+                    # Confirmar selección
                     input()
                     self.clear()
                     return selected
 
         except:
+            # Salir en caso de excepción
             input()
             self.clear()
             return selected
         
     def print_success(self, message):
+        """
+        Imprime un mensaje de éxito y espera a que el usuario presione enter para continuar.
+
+        :param message: El mensaje a imprimir.
+        """
         print("")
         print(message)
         input("Presione enter para continuar...")
         self.clear()
 
     def wait(self, message="Presione enter para continuar...", auto_clean=True):
+        """
+        Espera a que el usuario presione enter.
+
+        :param message: El mensaje a imprimir antes de esperar la entrada del usuario.
+        :param auto_clean: Si es True, se llama a self.clear() después de recibir la entrada del usuario.
+        """
         input(message)
         if auto_clean:
             self.clear()
 
     def wait_queue(self, message="Enviando peticion..."):
+        """
+        Imprime un mensaje mientras espera que una petición se complete.
+
+        :param message: El mensaje a imprimir mientras se espera.
+        """
         self.clear()
         print(message)
 
     def notify(self, message:str):
+        """
+        Emite una notificación sonora y muestra un mensaje en la consola.
+
+        :param message: El mensaje a mostrar en la consola.
+        """
         print('\a')
 
         print(f"[{threading.current_thread().ident}] {message}")
-
     # Imprimir progreso
     """
         Llamar en loop para crear progreso en consola
