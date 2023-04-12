@@ -1,9 +1,9 @@
 # Un script de python que lance un robot (launch_robot.py)
 from controllers.robot import Robot
 
-def main():
+def main(allow_clear=True):
     try:
-        robot = Robot()
+        robot = Robot(allow_clear=allow_clear)
         robot.start_consuming()
     except Exception as e:
         print(e)

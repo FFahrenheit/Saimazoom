@@ -11,7 +11,7 @@ import threading
 
 class Delivery:
         # Constructor de la clase Delivery, se inicializan los parámetros básicos para la entrega
-    def __init__(self, t_min=config.wait_delivery_min, t_max=config.wait_delivery_max, success_rate=config.p_entrega) -> None:
+    def __init__(self, t_min=config.wait_delivery_min, t_max=config.wait_delivery_max, success_rate=config.p_entrega, allow_clear=True) -> None:
         """
         Constructor de la clase Delivery que inicializa los parámetros básicos para la entrega.
 
@@ -26,7 +26,7 @@ class Delivery:
         self.t_min = t_min
         self.t_max = t_max
         self.success_rate = success_rate
-        self.ui = UIConsole()
+        self.ui = UIConsole(allow_clear=allow_clear)
         self.to_be_canceled = []
         try:
         # Se crea un consumidor y productor de colas para recibir y enviar mensajes de repartidores
@@ -94,7 +94,7 @@ class Delivery:
             )
         )
         # Se itera el número de veces definido, actualizando la barra de progreso y esperando el tiempo calculado para cada iteración
-        for i in range(iterations):
+        for i in range(iterations+1):
             # Si el ID del pedido se encuentra en la lista de cancelaciones, se establece la bandera de cancelación y se sale del ciclo
             if order.id in self.to_be_canceled:
                 cancelled = True

@@ -1,20 +1,21 @@
 from utils.rpc_queue_producer import QueueProducer
 import config
 import utils.message_parser as parser
+from utils.ui import UIConsole 
 from utils.messages import Message, Status
 from models.user import User
 import threading
 from models.order import Order
 from random import randint, random
 import time
-import os
 
 class AutoClient:
-    def __init__(self) -> None:
+    def __init__(self, allow_clear=False) -> None:
         #self.ui = UIConsole()
         try:
             # Se inicializa un objeto QueueProducer que se conecta a la cola de mensajes del servidor
             self.producer = QueueProducer(queue=config.queue_clientes)
+            self.ui = UIConsole(allow_clear=allow_clear)
         except:
             #si no se puede conectar al servidor sale del programa
             print("No fue posible establecer la conexion con el servidor de colas")
@@ -36,9 +37,9 @@ class AutoClient:
             self.hacer_pedido()   
             
             #se mostraran los pedidos en un bucle infinito para su constante actualizacion
-            for i in range(config.create_frequency):
+            for _ in range(config.create_frequency):
                 time.sleep(1)
-                os.system('cls' if os.name=='nt' else 'clear')
+                self.ui.clear()
                 self.ver_pedidos() 
         
     #funcion encargada para hacer pedidos
@@ -139,7 +140,7 @@ class AutoClient:
 
         message = parser.build_message(Message.REGISTRO, usuario.get_body())
         self.async_wait(message)
-        print("registrao")
+        print("Usuario registrado")
 
     def async_wait(self, message):
         # Crea un hilo para enviar una solicitud asíncrona al servidor y esperar su respuesta

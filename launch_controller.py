@@ -1,7 +1,7 @@
 # Un script de python que lance el controlador (launch_controller.py)
 from controllers.controller import Controller
 
-def main():
+def main(allow_clear=True):
     controller = Controller()
     controller.start_consuming()
 

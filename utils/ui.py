@@ -4,7 +4,7 @@ import time
 import threading
 
 class UIConsole:
-    def __init__(self, debounce_time = 0.15):
+    def __init__(self, debounce_time=0.15, allow_clear=True):
         """
         Inicializa la clase y define un tiempo de debounce predeterminado.
 
@@ -12,14 +12,16 @@ class UIConsole:
         debounce_time (float): tiempo de debounce en segundos. Valor por defecto es 0.15 segundos.
         """
         self.debouce_time = debounce_time
+        self.allow_clear = allow_clear
 
     def clear(self):
         """
         Limpia la consola.
         """
-        os.system('cls' if os.name=='nt' else 'clear')
+        if self.allow_clear:
+            os.system('cls' if os.name=='nt' else 'clear')
     
-    def print_menu(self, options : list, selected = 0):
+    def print_menu(self, options: list, selected = 0):
         """
         Imprime un menú en la consola con las opciones proporcionadas. La opción seleccionada se marca con un ">".
 
@@ -174,6 +176,13 @@ class UIConsole:
             auto_clean   - Optional : limpiear en cada iteracion (bool)
     """
     def progress_bar(self, iteration: int, total: int, prefix='', suffix='', decimals=1, length=100, fill='█', print_end="\r", auto_clean=True):
+        if not self.allow_clear:
+            if iteration == 0:
+                print(f"{prefix} ... empezando")
+            elif iteration == total:
+                print(f"{prefix} terminado.")
+            return
+        
         if auto_clean:
             self.clear()
         percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
